@@ -4,7 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: './',
+  base: '',
   plugins: [
     react(),
     VitePWA({
@@ -12,7 +12,8 @@ export default defineConfig({
       injectRegister: 'auto',
       strategies: 'generateSW',
       minify: false,
-      includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'mask-icon.svg'],
+      disable: !!process.env.CAPACITOR, // Disable PWA Service Worker in Capacitor builds
+      includeAssets: ['manifest.json'],
       manifest: {
         name: 'MedStore',
         short_name: 'MedStore',
