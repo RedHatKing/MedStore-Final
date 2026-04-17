@@ -118,10 +118,12 @@ const Products: React.FC = () => {
     if (e.key === 'Enter') {
       e.preventDefault();
       if (nextRef.current) {
-        nextRef.current.focus();
+        const element = nextRef.current;
+        element.focus();
+        // Give time for mobile keyboard to deploy and layout to adjust
         setTimeout(() => {
-            nextRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 10);
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 100);
       }
     }
   };
@@ -397,8 +399,11 @@ const Products: React.FC = () => {
                         if (e.key === 'Enter') {
                             e.preventDefault();
                             if (submitBtnRef.current) {
-                                submitBtnRef.current.focus();
-                                submitBtnRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                const element = submitBtnRef.current;
+                                element.focus();
+                                setTimeout(() => {
+                                  element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                }, 100);
                             }
                         }
                     }}
