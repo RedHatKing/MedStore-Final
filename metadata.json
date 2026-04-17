@@ -1,0 +1,4 @@
+{
+  "name": "Offline Int Copy of MedStore Working",
+  "description": "A single-user, offline-capable inventory and party management system using IndexedDB."
+}
