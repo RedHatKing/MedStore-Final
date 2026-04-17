@@ -1,0 +1,5 @@
+{
+	"appId": "com.medstore.app",
+	"appName": "MedStore",
+	"webDir": "dist"
+}
