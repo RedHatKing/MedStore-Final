@@ -11,7 +11,7 @@ export class MedStoreDatabase extends Dexie {
 
   constructor() {
     super('MedStoreOfflineDB');
-    this.version(1).stores({
+    this.version(2).stores({
       parties: 'id, name, contact, created_at',
       products: 'id, product_name, batch_no, expiry_date, party_id, created_at'
     });

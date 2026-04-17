@@ -40,29 +40,28 @@ const Dashboard: React.FC = () => {
     if (node) observer.current.observe(node);
   }, [loading, hasMore, loadMoreProducts, searchTerm]);
 
-  // Server-side search logic with debounce
-  useEffect(() => {
-    if (searchTerm.trim().length === 0) {
+  // Instant search logic
+  const performSearch = useCallback(async (term: string) => {
+    if (!term.trim()) {
       setSearchResults([]);
       setIsSearching(false);
       return;
     }
 
-    const delayDebounceFn = setTimeout(async () => {
-      setIsSearching(true);
-      try {
-        console.log(`Dashboard: Searching for "${searchTerm}"...`);
-        const results = await inventoryService.searchProducts(searchTerm);
-        setSearchResults(results);
-      } catch (error) {
-        console.error('Dashboard: Search failed:', error);
-      } finally {
-        setIsSearching(false);
-      }
-    }, 500); // 500ms debounce
+    setIsSearching(true);
+    try {
+      const results = await inventoryService.searchProducts(term);
+      setSearchResults(results);
+    } catch (error) {
+      console.error('Dashboard: Search failed:', error);
+    } finally {
+      setIsSearching(false);
+    }
+  }, []);
 
-    return () => clearTimeout(delayDebounceFn);
-  }, [searchTerm]);
+  useEffect(() => {
+    performSearch(searchTerm);
+  }, [searchTerm, performSearch]);
 
   useEffect(() => {
     // Priority: high - trigger fetch as soon as possible if not done
@@ -88,7 +87,9 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  const displayProducts = searchTerm.trim().length > 0 ? searchResults : products;
+  const displayProducts = useMemo(() => {
+    return searchTerm.trim().length > 0 ? searchResults : products;
+  }, [searchTerm, searchResults, products]);
 
   const handleManualRefresh = () => {
     console.log('Dashboard: Manual refresh triggered');

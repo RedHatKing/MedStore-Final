@@ -96,9 +96,13 @@ export const inventoryService = {
   },
 
   async searchProducts(searchTerm: string): Promise<Product[]> {
-    const term = searchTerm.toLowerCase();
+    if (!searchTerm) return [];
+    
+    // Using high-speed index method: startsWithIgnoreCase
     const data = await db.table('products')
-      .filter((p: any) => p.product_name.toLowerCase().includes(term))
+      .where('product_name')
+      .startsWithIgnoreCase(searchTerm)
+      .limit(20)
       .toArray();
     
     return data
